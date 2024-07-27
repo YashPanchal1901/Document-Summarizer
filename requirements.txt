@@ -1,0 +1,7 @@
+transformers
+PyPDF2
+langchain_community
+langchain
+-U langchain-huggingface
+PyPDF2
+streamlit
