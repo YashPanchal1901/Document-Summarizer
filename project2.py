@@ -7,15 +7,19 @@ from langchain_huggingface import HuggingFacePipeline
 from langchain.prompts import PromptTemplate
 from transformers import GPT2Tokenizer
 import re
+from langchain.vectorstores import FAISS
+from langchain.embeddings import HuggingFaceEmbeddings
+from langchain.prompts import ChatPromptTemplate
+from langchain.llms import HuggingFaceEndpoint
+from langchain.schema.runnable import RunnablePassthrough
 
 
 tokenizer2 = GPT2Tokenizer.from_pretrained("gpt2")
 tokenizer = AutoTokenizer.from_pretrained("MBZUAI/LaMini-Flan-T5-248M")
 model = T5ForConditionalGeneration.from_pretrained("MBZUAI/LaMini-Flan-T5-248M")
+embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
 
-qa = pipeline(
-        "question-answering", model="distilbert/distilbert-base-cased-distilled-squad"
-    )
+api_key = st.secrets["HUGGINGFACEHUB_API_KEY"]
 
 
 st.set_page_config(layout="wide", page_title="Document Summarizer", page_icon="📝")
@@ -121,12 +125,38 @@ def text_summary(text, temp, max_len=512):
 
     return combined_string
 
-def qapdf(llm, text, ques):
-    ans = llm(question=ques, context=text)['answer']
-    separated_lines = ans.split('\n')
-    combined_string = '. '.join(separated_lines)
 
-    return combined_string
+def get_conversation_chain(text_chunks, embeddings):
+
+    vectorstore = FAISS.from_texts(text_chunks, embeddings)
+
+    retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
+
+    llm = HuggingFaceEndpoint(
+        huggingfacehub_api_token=api_key,
+        repo_id="mistralai/Mistral-7B-Instruct-v0.3",
+        timeout=480
+    )
+
+    template = """You are an assistant for question-answering tasks.
+    Use the following pieces of retrieved context to answer the question.
+    If you don't know the answer, just say that you don't know.
+    Use 3 sentences maximum and keep the answer concise.
+    Question: {question}
+    Context: {context}
+    Answer:
+    """
+    prompt = ChatPromptTemplate.from_template(template)
+
+    rag_chain = (
+        {"context": retriever, "question": RunnablePassthrough()}
+        | prompt
+        | llm
+    )
+
+    return rag_chain
+
+
 def extract_text_from_pdf(file_path):
     # Open the PDF file using PyPDF2
     with open(file_path, "rb") as f:
@@ -150,6 +180,12 @@ def spliter(input_text):
     chunks_text = [tokenizer2.decode(chunk) for chunk in chunks]
 
     return chunks_text
+
+def qapdf(text, query):
+    chunk = spliter(text)
+    chain = get_conversation_chain(chunk, embeddings)
+    response = chain.invoke(query)
+    return response
 
 def extract_integer(text):
     # Find all integers in the text
@@ -175,7 +211,7 @@ if choice == "Question Answering PDFs":
 
         input_text = st.text_area("Enter your question here")
         if st.button("Answer"):
-            result = qapdf(qa, st.session_state.text, input_text)
+            result = qapdf(st.session_state.text, input_text)
             st.success(result)
             st.session_state.history.append({'question': input_text, 'answer': result})
 
