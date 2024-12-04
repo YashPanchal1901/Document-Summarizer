@@ -101,5 +101,3 @@ pip install -r requirements.txt
 3. **Dependencies Missing**:
    - Reinstall missing dependencies using `pip`.
 
-## License
-This project is distributed under the MIT License.
