@@ -1,7 +1,10 @@
-transformers
-PyPDF2
-langchain_community
+langchain_huggingface
+langchain-community
 langchain
-langchain-huggingface
-PyPDF2
+transformers
+pypdf
+rapidocr-onnxruntime
+sentence-transformers
+faiss-cpu
+PyMuPDF
 streamlit
