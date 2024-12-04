@@ -4,7 +4,7 @@ from transformers import pipeline
 from PyPDF2 import PdfReader
 from langchain import LLMChain
 from langchain_huggingface import HuggingFacePipeline
-from langchain_community.prompts import PromptTemplate
+from langchain.prompts import PromptTemplate
 from transformers import GPT2Tokenizer
 import re
 from langchain_community.vectorstores import FAISS
