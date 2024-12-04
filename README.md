@@ -1,82 +1,104 @@
 # Document Summarizer and Q&A Application
 
-This Streamlit application allows users to summarize documents and perform question-answering on PDFs. It leverages pre-trained language models from Hugging Face's `transformers` library to provide accurate and concise results. The application provides a user-friendly interface for uploading documents, asking questions, and generating summaries.
+## Overview
+
+This Streamlit application performs **Document Summarization** and **Question Answering from PDFs** using Hugging Face models. Users can upload PDF files to extract and process text, either summarizing the document or asking specific questions about its content.
 
 ## Features
+1. **Question Answering PDFs**:
+   - Upload a PDF document.
+   - Enter a question about the document to receive a concise answer.
+   - View the history of questions and answers.
 
-1. **Document Summarization**: Upload a PDF document and get a concise summary based on a provided prompt.
-2. **Question Answering on PDFs**: Upload a PDF document, enter a question, and receive an answer based on the document's content.
-3. **History Tracking**: View a history of questions asked and answers received.
+2. **Document Summarization**:
+   - Upload a PDF document.
+   - Enter a custom prompt to summarize the document.
+   - Optionally specify a `max_length` in the prompt for summary length control.
 
-## Installation
+## Dependencies
 
-To run this application, ensure you have Python installed. Follow these steps to set up the environment:
+Ensure you have the following Python libraries installed:
+- `streamlit`
+- `transformers`
+- `PyPDF2`
+- `langchain`
+- `sentence-transformers`
+- `faiss-cpu`
 
-1. Clone the repository:
-    ```bash
-    git clone https://github.com/your-repo/document-summarizer-qa.git
-    cd document-summarizer-qa
-    ```
+To install dependencies, run:
+```terminal
+pip install -r requirements.txt
+```
 
-2. Install the required packages:
-    ```bash
-    pip install -r requirements.txt
-    ```
+## File Structure
+- **main.py**: The primary script containing the app's code.
+- **doc_file.pdf**: Temporary storage for the uploaded PDF file during processing.
 
-## Usage
+## Setup
 
-1. **Run the Streamlit App**:
-    ```bash
-    streamlit run app.py
-    ```
+1. **Install Python**: Use Python 3.8 or later.
 
-2. **Navigate the Interface**:
-   - Use the sidebar to select either "Question Answering PDFs" or "Summarize Document".
-   - Upload a PDF file.
-   - For summarization, enter your prompt and optionally specify a maximum length for the summary.
-   - For question answering, enter your question in the text area and click "Answer".
+2. **Install Dependencies**:
+   Install the required Python libraries as shown above.
 
-## Code Overview
+3. **Hugging Face API Key**:
+   - Obtain your API key from [Hugging Face](https://huggingface.co/settings/tokens).
+   - Save the key in your `secrets.toml` file in the `.streamlit` directory:
+     ```
+     [secrets]
+     HUGGINGFACEHUB_API_KEY = "your_api_key_here"
+     ```
 
-### Dependencies
+4. **Run the App**:
+   Start the Streamlit app:
+   ```bash
+   streamlit run main.py
+   ```
 
-- **Streamlit**: For building the web application.
-- **Transformers**: For utilizing pre-trained language models.
-- **PyPDF2**: For extracting text from PDF documents.
-- **LangChain**: For managing language model prompts and chains.
+## How to Use
 
-### Key Components
+### 1. **Question Answering PDFs**
+   - Select the "Question Answering PDFs" option from the sidebar.
+   - Upload your PDF document.
+   - Enter your question in the text box.
+   - Click **Answer** to generate a response.
+   - Review previous Q&A interactions under the "Question & Answer History" section.
 
-- **Text Summarization**:
-  - The `text_summary` function generates summaries using a pre-trained T5 model.
-  - The `spliter` function splits long texts into manageable chunks.
+### 2. **Summarize Document**
+   - Select the "Summarize Document" option from the sidebar.
+   - Upload your PDF document.
+   - Enter a prompt to guide the summarization, e.g., "Summarize in 200 words".
+   - Click **Summarize Document** to generate a concise summary.
 
-- **Question Answering**:
-  - The `qapdf` function uses a DistilBERT model to answer questions based on the content of a PDF.
-
-- **PDF Handling**:
-  - The `extract_text_from_pdf` function extracts text from uploaded PDF files.
-  - The `extract_integer` function extracts the first integer from a string, used to get the maximum summary length.
-
-- **Streamlit Interface**:
-  - The app's layout and styling are defined in the `st.markdown` section with custom CSS.
-  - The main logic for handling user input and displaying results is within the `st.sidebar` and main content area.
+## Important Notes
+1. **Caching**: 
+   - The app caches text extraction and embeddings to speed up repeated queries during a session.
+2. **Max Token Length**:
+   - The document is split into chunks of 1024 tokens with an overlap of 50 tokens for better processing.
+3. **Embeddings**:
+   - Uses `sentence-transformers/all-MiniLM-L6-v2` for efficient vector representation.
+4. **Language Model**:
+   - Summarization uses `MBZUAI/LaMini-Flan-T5-248M`.
+   - Question answering uses `Mistral-7B-Instruct-v0.3`.
 
 ## Customization
+- Modify **appearance** by tweaking the CSS under `st.markdown` for a personalized look.
+- Replace Hugging Face models with other compatible models in the `AutoTokenizer`, `pipeline`, or `HuggingFaceEndpoint` functions.
 
-You can customize the models and the interface to fit your specific needs:
-- Replace the pre-trained models with other models available on Hugging Face.
-- Modify the CSS for a different look and feel.
-- Extend the functionality by adding more features such as different file types or advanced NLP tasks.
+## Example Prompts
+- **Question Answering**: 
+   - *"What is the total sales amount mentioned in the report?"*
+- **Summarization**: 
+   - *"Summarize the document focusing on financial data in 100 words."*
 
-## Contributing
-
-Contributions are welcome! Please feel free to submit a pull request or open an issue if you have any suggestions or improvements.
+## Troubleshooting
+1. **File Processing Errors**:
+   - Ensure the uploaded file is a valid PDF.
+   - Check file permissions if errors persist.
+2. **API Key Issues**:
+   - Ensure your Hugging Face API key is correctly set in the `secrets.toml` file.
+3. **Dependencies Missing**:
+   - Reinstall missing dependencies using `pip`.
 
 ## License
-
-This project is licensed under the MIT License.
-
----
-
-By following these instructions, you should be able to set up and run the Document Summarizer and Q&A Application locally. Enjoy using the tool and feel free to contribute to its development!
+This project is distributed under the MIT License.
