@@ -4,13 +4,13 @@ from transformers import pipeline
 from PyPDF2 import PdfReader
 from langchain import LLMChain
 from langchain_huggingface import HuggingFacePipeline
-from langchain.prompts import PromptTemplate
+from langchain_community.prompts import PromptTemplate
 from transformers import GPT2Tokenizer
 import re
-from langchain.vectorstores import FAISS
+from langchain_community.vectorstores import FAISS
 from langchain.embeddings import HuggingFaceEmbeddings
-from langchain.prompts import ChatPromptTemplate
-from langchain.llms import HuggingFaceEndpoint
+from langchain_community.prompts import ChatPromptTemplate
+from langchain_huggingface import HuggingFaceEndpoint
 from langchain.schema.runnable import RunnablePassthrough
 
 
