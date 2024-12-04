@@ -9,7 +9,7 @@ from transformers import GPT2Tokenizer
 import re
 from langchain_community.vectorstores import FAISS
 from langchain.embeddings import HuggingFaceEmbeddings
-from langchain_community.prompts import ChatPromptTemplate
+from langchain.prompts import ChatPromptTemplate
 from langchain_huggingface import HuggingFaceEndpoint
 from langchain.schema.runnable import RunnablePassthrough
 
