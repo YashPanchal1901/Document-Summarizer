@@ -3,6 +3,7 @@
 ## Overview
 
 This Streamlit application performs **Document Summarization** and **Question Answering from PDFs** using Hugging Face models. Users can upload PDF files to extract and process text, either summarizing the document or asking specific questions about its content.
+You can Try it on [DocumentSummarizer](https://document-summarizer-qjhbmke4he7k7bo7ujbeoz.streamlit.app).
 
 ## Features
 1. **Question Answering PDFs**:
