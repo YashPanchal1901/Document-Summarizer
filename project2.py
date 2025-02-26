@@ -1,5 +1,5 @@
 import streamlit as st
-from transformers import AutoTokenizer, T5ForConditionalGeneration
+from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 from transformers import pipeline
 from PyPDF2 import PdfReader
 from langchain import LLMChain
@@ -15,8 +15,8 @@ from langchain.schema.runnable import RunnablePassthrough
 
 
 tokenizer2 = GPT2Tokenizer.from_pretrained("gpt2")
-tokenizer = AutoTokenizer.from_pretrained("MBZUAI/LaMini-Flan-T5-248M")
-model = T5ForConditionalGeneration.from_pretrained("MBZUAI/LaMini-Flan-T5-248M")
+tokenizer = AutoTokenizer.from_pretrained("facebook/bart-large-cnn")
+model = AutoModelForSeq2SeqLM.from_pretrained("facebook/bart-large-cnn")
 embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
 
 api_key = st.secrets["HUGGINGFACEHUB_API_KEY"]
