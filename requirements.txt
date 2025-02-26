@@ -9,3 +9,5 @@ faiss-cpu
 PyMuPDF
 streamlit
 torch
+opencv-python
+pypdf
