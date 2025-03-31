@@ -8,10 +8,17 @@ from langchain.prompts import PromptTemplate
 from transformers import GPT2Tokenizer
 import re
 from langchain_community.vectorstores import FAISS
-from langchain.embeddings import HuggingFaceEmbeddings
+from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain.prompts import ChatPromptTemplate
 from langchain_huggingface import HuggingFaceEndpoint
 from langchain.schema.runnable import RunnablePassthrough
+
+import asyncio
+
+try:
+    asyncio.get_running_loop()
+except RuntimeError:
+    asyncio.set_event_loop(asyncio.new_event_loop())
 
 
 tokenizer2 = GPT2Tokenizer.from_pretrained("gpt2")
