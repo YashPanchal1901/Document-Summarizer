@@ -11,3 +11,5 @@ streamlit
 torch
 opencv-python
 pypdf
+torchvision 
+torchaudio
