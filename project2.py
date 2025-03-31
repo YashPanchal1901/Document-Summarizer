@@ -2,7 +2,7 @@ import streamlit as st
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 from transformers import pipeline
 from PyPDF2 import PdfReader
-from langchain import LLMChain
+from langchain.chains.LLMChain import LLMChain
 from langchain_huggingface import HuggingFacePipeline
 from langchain.prompts import PromptTemplate
 from transformers import GPT2Tokenizer
