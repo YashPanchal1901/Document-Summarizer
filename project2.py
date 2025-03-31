@@ -13,13 +13,6 @@ from langchain.prompts import ChatPromptTemplate
 from langchain_huggingface import HuggingFaceEndpoint
 from langchain.schema.runnable import RunnablePassthrough
 
-import asyncio
-
-try:
-    asyncio.get_running_loop()
-except RuntimeError:
-    asyncio.set_event_loop(asyncio.new_event_loop())
-
 
 tokenizer2 = GPT2Tokenizer.from_pretrained("gpt2")
 tokenizer = AutoTokenizer.from_pretrained("facebook/bart-large-cnn")
